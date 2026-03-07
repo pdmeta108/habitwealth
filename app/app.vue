@@ -1,4 +1,12 @@
 <script setup>
+const { locale, locales } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+const localePath = useLocalePath()
+
+const availableLocales = computed(() => {
+  return locales.value.filter((i) => i.code !== locale.value)
+})
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -47,6 +55,16 @@ useSeoMeta({
           color="neutral"
           variant="ghost"
         />
+        <ul class="flex space-x-4">
+          <li
+            v-for="lang in availableLocales"
+            :key="lang.code">
+            <NuxtLink :to="switchLocalePath(lang.code)">
+              {{ lang.name }}
+            </NuxtLink>
+          </li>
+          {{ $t("welcome") }}
+        </ul>
       </template>
     </UHeader>
 
